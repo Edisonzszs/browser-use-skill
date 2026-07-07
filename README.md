@@ -23,11 +23,9 @@ browser-use-skill/
     ├── LICENSE.txt
     └── references/
         ├── playwright.md               # Playwright 详解（CLI/MCP/脚本三入口）
-        ├── camoufox.md                 # Camoufox 反指纹 Firefox 完整文档
-        ├── smartedu-pdf-download.md    # 国家中小学智慧教育平台 PDF 提取
-        └── yuketang-post-comment.md    # 雨课堂论坛发评论
+        └── camoufox.md                 # Camoufox 反指纹 Firefox 完整文档
 ```
-
+```
 ## 🚀 安装
 
 将 `browser-use/` 目录放入对应 Agent 平台的 skills 指令目录：

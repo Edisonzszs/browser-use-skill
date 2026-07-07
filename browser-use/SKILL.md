@@ -135,13 +135,6 @@ JSON.stringify({iframes: document.querySelectorAll('iframe').length, iframeSrc: 
 
 提取前先在 Console 执行 `PDFViewerApplication.pagesCount` 确认 PDF 已加载完。该方法利用的是用户在浏览器中已合法访问的资源。
 
-## 站点案例
-
-具体站点的工作流单独成文，按需查阅：
-
-- [references/smartedu-pdf-download.md](references/smartedu-pdf-download.md) — 国家中小学智慧教育平台（basic.smartedu.cn）受保护 PDF 的提取
-- [references/yuketang-post-comment.md](references/yuketang-post-comment.md) — 雨课堂（yuketang.cn）论坛发评论流程
-
 ## 跨 Agent 平台安装
 
 本 skill 基于 SKILL.md 标准格式，可直接被以下 Agent 平台消费（放入各自的 skills 指令目录即可，无需额外适配）：
