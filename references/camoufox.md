@@ -240,47 +240,27 @@ with Camoufox(fingerprint_preset=True, os="macos") as browser:
 
 按二进制版本自动选预设包（Firefox ≥149 用 `fingerprint-presets-v150.json`，312 个预设覆盖 v149–v152）；UA 自动改写匹配当前二进制。传 dict 可钉死某个预设。
 
-## 两个 camoufox agent CLI（要 shell 命令式驱动时）
+## 第三方 Camoufox agent CLI
 
-不想写 Python 脚本、想像 playwright-cli 那样用 shell 子命令驱动 Camoufox 时，有两个第三方项目，niche 不同：
+不想写 Python 脚本、想像 playwright-cli 那样用 shell 子命令驱动 Camoufox 时，有两个第三方项目：
 
-| | `camoufox-browser`（rlgrpe）| `camoufox-cli`（Bin-Huang）|
+| 项目 | 特点 | 适合 |
 |---|---|---|
-| PyPI/npm | `camoufox-browser`（v0.1.1）| `camoufox-cli`（pip **和** npm 都有）|
-| 装法 | `uv tool install camoufox-browser` / `pip` / `pipx`；MCP extra `camoufox-browser[mcp]` | `npm i -g camoufox-cli` 或 `pipx install camoufox-cli`；`camoufox-cli install [--with-deps]` 装浏览器/系统库 |
-| ref 风格 | 语义标签 `button:Sign in`、`textbox:Email` | `@e1`（playwright-cli 风格加 `@`）|
-| 持久身份 | 基础（daemon + `--persistent`）| **强项**：冻结指纹/OS/canvas seed、`~/.camoufox-cli/config.json` 配置、`--persistent <path>` 多身份并行、按代理 IP 重算 GeoIP |
-| MCP | 有（`camoufox-mcp`，`uvx --from "camoufox-browser[mcp]" camoufox-mcp`）| 无（纯 CLI + skill）|
-| skill | `npx skills add https://github.com/rlgrpe/camoufox-browser-cli --skill camoufox` | `npx skills add Bin-Huang/camoufox-cli` |
-| 平台 | Linux / macOS | 跨平台 |
-| 架构 | 共享操作层 + 后台 daemon（仿 vercel-labs/agent-browser）| CLI ─Unix socket→ Python daemon ─Playwright→ Camoufox，daemon 闲置 30min 自停 |
-| 依赖 | `cloverlabs-camoufox[geoip]>=0.5.5` | Camoufox |
-
-选择：
-- 要**最强的持久指纹身份 / 多身份并行 / 配置文件 / 代理轮换** → `camoufox-cli`（Bin-Huang）。
-- 要**自带 MCP**、或更贴近 CloverLabsAI 官方组织 → `camoufox-browser`（rlgrpe）。
-- 两者都是年轻第三方项目，按实验工具看待稳定性；本机 `~/projects/readonly-repos` 已各 clone 一份可查源码。
-
-`camoufox-browser` 示例：
+| `camoufox-cli`（Bin-Huang） | `@e1` ref 风格、持久指纹身份、多身份并行、代理轮换、跨平台 | 需要最强的持久身份 / 多身份管理 |
+| `camoufox-browser`（rlgrpe） | 语义标签 ref、自带 MCP、Linux/macOS | 需要 MCP 集成 |
 
 ```bash
-camoufox-browser open https://example.com
-camoufox-browser snapshot
-camoufox-browser click 'button:Sign in'
-camoufox-browser fill 'textbox:Email' me@example.com --submit
-camoufox-browser screenshot --output page.png
-camoufox-browser close
-```
-
-`camoufox-cli` 示例：
-
-```bash
+# camoufox-cli 示例
 camoufox-cli open https://example.com
 camoufox-cli snapshot -i                 # 只列交互元素，带 [ref=e1]
 camoufox-cli click @e1
-camoufox-cli --session work --persistent ~/.camoufox-cli/profiles/alice open https://...
-camoufox-cli close
+
+# camoufox-browser 示例
+camoufox-browser open https://example.com
+camoufox-browser click 'button:Sign in'
 ```
+
+> 两者都是年轻第三方项目，按实验工具看待稳定性。
 
 ## 反爬实测记录
 

@@ -220,4 +220,4 @@ asyncio.run(main())
 - **CLI（`@playwright/cli` + SKILLS）= coding agent 首选**。CLI 调用 **token 更省**：不往上下文里塞庞大的工具 schema 和冗长的无障碍树，agent 用简洁、专用命令直接动作 —— 适合要同时兼顾大代码库、测试、推理、还要省上下文窗口的高吞吐 agent。
 - **MCP** 适合需要**持久状态 + 富内省 + 对页面结构反复推理**的专门 agentic loop（探索式自动化、自愈测试、长程自治），此时"维持连续浏览器上下文"的价值盖过 token 成本。
 
-**对 coding agent（Hermes / Claude Code / Codex / Cursor 等）→ 默认用 CLI**（`@playwright/cli` + `playwright-cli install --skills`）。只有当任务是"跨很多轮维持同一个浏览器上下文做探索 / 自愈"时，才考虑 MCP。
+**对 coding agent → 默认用 CLI**（`@playwright/cli` + `playwright-cli install --skills`）。只有当任务是"跨很多轮维持同一个浏览器上下文做探索 / 自愈"时，才考虑 MCP。

@@ -18,17 +18,16 @@
 
 ```
 browser-use-skill/
-└── browser-use/
-    ├── SKILL.md                        # 主 Skill（Agent 平台直接消费）
-    ├── LICENSE.txt
-    └── references/
-        ├── playwright.md               # Playwright 详解（CLI/MCP/脚本三入口）
-        └── camoufox.md                 # Camoufox 反指纹 Firefox 完整文档
+├── SKILL.md                        # 主 Skill（Agent 平台直接消费）
+├── LICENSE.txt
+└── references/
+    ├── playwright.md               # Playwright 详解（CLI/MCP/脚本三入口）
+    └── camoufox.md                 # Camoufox 反指纹 Firefox 完整文档
 ```
-```
+
 ## 🚀 安装
 
-将 `browser-use/` 目录放入对应 Agent 平台的 skills 指令目录：
+将 `SKILL.md` + `references/` 放入对应 Agent 平台的 skills 指令目录：
 
 | Agent 平台 | 安装路径 |
 |---|---|
