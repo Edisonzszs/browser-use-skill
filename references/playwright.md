@@ -6,17 +6,11 @@ description: Playwright 详解 —— uv/npm 安装差异、CLI/MCP/脚本三种
 
 涵盖：架构心智模型、uv vs npm 安装差异与推荐、三种入口（CLI / MCP / 库脚本）、CLI vs MCP 该用哪个。
 
-## 架构：为什么说"Playwright 本体是 Node"
+## 架构：Playwright 本体是 Node
 
-Playwright 的浏览器由一个 **Node driver**（`playwright-core` npm 包）驱动；各语言绑定（Python / .NET / Java）都只是这个 driver 的 **RPC 客户端**，本身不直接开浏览器。
+Playwright 的浏览器由 **Node driver**（`playwright-core` npm 包）驱动；各语言绑定（Python / .NET / Java）只是这个 driver 的 RPC 客户端。
 
-实测证据（microsoft/playwright-python）：
-
-- `pyproject.toml` 里 `[project.scripts] playwright = "playwright.__main__:main"` —— Python wheel 装上后会提供一个 `playwright` 命令。
-- 仓库根有 `NODE_VERSION`（实测 `24.17.0`）和 `DRIVER_VERSION`（实测 `1.61.1-beta-…`）。`setup.py` 注释写明："driver is assembled … from the playwright-core npm package … and the official Node.js binaries"。
-- 即：**Python wheel 里自带一份 Node.js 运行时 + playwright-core driver**，解包进 `playwright/driver/`。Python 调 `page.click()` 实际是把请求发给这个内置 Node driver。
-
-> 结论：用 Python 还是 Node，只决定你**写脚本 / 调命令的语言**；底层都是同一套 Node driver 开同一批浏览器（Chromium / Firefox / WebKit，版本随 Playwright 版本走，例如 Chromium 149 / Firefox 151 / WebKit 26.5）。**"用 uv 就能彻底摆脱 Node"是个误解**——Python wheel 内部照样捆了 Node，你只是不用自己管它。
+> 结论：用 Python 还是 Node，只决定写脚本的语言；底层都是同一套 Node driver 开同一批浏览器。Python wheel 内部自带一份 Node.js 运行时 + driver。**"用 uv 就能摆脱 Node"是个误解。**
 
 ## 安装：uv（Python）vs npm（Node）
 
@@ -130,9 +124,9 @@ playwright-cli detach                        # 脱离，外部浏览器继续跑
 
 MCP server，把 Playwright 暴露成 MCP 工具，基于**无障碍树**而非截图（不需要视觉模型、确定性高）。
 
-### 给 coding agent 配置
+### 给 Agent 平台配置
 
-写对应的 MCP 配置文件（以 Claude Code 为例，`~/.claude/mcp-config.json`）：
+写对应的 MCP 配置文件（各 Agent 平台的 MCP 配置路径不同，按平台文档放置）：
 
 ```json
 {
@@ -213,11 +207,4 @@ asyncio.run(main())
 
 > 想要 Python 自动生成脚本：`playwright codegen <url>`（录制操作成代码）。
 
-## CLI vs MCP：到底用哪个
 
-官方 README（playwright-cli / playwright-mcp）给的原话结论：
-
-- **CLI（`@playwright/cli` + SKILLS）= coding agent 首选**。CLI 调用 **token 更省**：不往上下文里塞庞大的工具 schema 和冗长的无障碍树，agent 用简洁、专用命令直接动作 —— 适合要同时兼顾大代码库、测试、推理、还要省上下文窗口的高吞吐 agent。
-- **MCP** 适合需要**持久状态 + 富内省 + 对页面结构反复推理**的专门 agentic loop（探索式自动化、自愈测试、长程自治），此时"维持连续浏览器上下文"的价值盖过 token 成本。
-
-**对 coding agent → 默认用 CLI**（`@playwright/cli` + `playwright-cli install --skills`）。只有当任务是"跨很多轮维持同一个浏览器上下文做探索 / 自愈"时，才考虑 MCP。
